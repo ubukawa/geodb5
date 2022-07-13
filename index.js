@@ -68,6 +68,7 @@ const queue = new Queue(async (t, cb) => {
                 '--no-tile-size-limit',
                 '--force',
                 '--simplification=2',
+                `--clip-bounding-box=${bbox.join(',')}`, 
                 '--quiet',
                 `--minimum-zoom=${minzoom}`,
                 `--maximum-zoom=${maxzoom}`,
