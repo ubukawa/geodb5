@@ -32,19 +32,18 @@ const sleep = (wait) => {
     })
 }
 
-
 const queue = new Queue(async (t, cb) => {
     const startTime = new Date()
     const key = t.key
     const tile = t.tile
     const [z, x, y] = tile
     const gjsPath = `${geojsonsDir}/inter-${key}.geojsons`
-    const tmpPath = `${mbtilesDir}/part-${key}.mbtiles` //`${mbtilesDir}/part-${z}-${x}-${y}.mbtiles`
-    const dstPath = `${mbtilesDir}/${key}.mbtiles` //`${mbtilesDir}/${z}-${x}-${y}.mbtiles`
+    const tmpPath = `${mbtilesDir}/part-${key}.mbtiles` 
+    const dstPath = `${mbtilesDir}/${key}.mbtiles` 
     const bbox = tilebelt.tileToBBOX([x, y, z])
 
     keyInProgress.push(key)
-    console.log(`${keyInProgress} in progress`)
+    console.log(`[${keyInProgress}] in progress`)
 
     const FSstream = fs.createWriteStream(gjsPath, fsOptions)
 
@@ -60,7 +59,7 @@ const queue = new Queue(async (t, cb) => {
     .on('finish', () => {
         FSstream.end()
         const PendTime = new Date()
-        console.log(`FS write end: ${startTime.toISOString()} --> ${PendTime.toISOString()}`)
+        console.log(`FS write end ${key}: ${startTime.toISOString()} --> ${PendTime.toISOString()}`)
         //from here
         const VTconversion = new Promise((resolve, reject)=>{
             const tippecanoe = spawn(tippecanoePath, [
@@ -77,15 +76,15 @@ const queue = new Queue(async (t, cb) => {
                .on('exit', () => {
                     fs.renameSync(tmpPath, dstPath)
                     fs.unlinkSync(gjsPath)
-                    const endTime = new Date()
-                    console.log(`Tippecanoe ${endTime.toISOString()} (^o^)/`)
+                    //const endTime = new Date()
+                    //console.log(`Tippecanoe: ${key} ends at ${endTime.toISOString()} (^o^)/`)
                     //keyInProgress = keyInProgress.filter((v) => !(v === key))
                     resolve()
                 })
         })
         .then(()=> {
             const endTime = new Date()
-            console.log(`${key} ends: ${startTime} --> ${endTime} (^o^)/`)
+            console.log(`${key} ends: ${startTime.toISOString()} --> ${endTime.toISOString()} (^o^)/`)
             keyInProgress = keyInProgress.filter((v) => !(v === key))
             return cb()
         })
@@ -98,7 +97,6 @@ const queue = new Queue(async (t, cb) => {
         '/vsistdout/',
         '-clipdst', bbox[0], bbox[1], bbox[2], bbox[3],
         srcdb.url
-        //`small-data/${key}.geojson`
     ])
     
     //just in case (from here)
@@ -116,14 +114,15 @@ const queue = new Queue(async (t, cb) => {
  //   return cb()
 
 },{
-    concurrent: 2,
-    maxRetries: 3,
-    retryDelay: 5000
+    concurrent: config.get('concurrent'),
+    maxRetries: config.get('maxRetries'),
+    retryDelay: config.get('retryDelay')
 })
 
 
 const queueTasks = () => {
-    for (let tile of [[6,32,20],[6,32,21],[6,32,22],[6,32,23],[6,33,20],[6,33,21],[6,33,22]]){
+    for (let tile of srcdb.tiles){
+    //for (let tile of [[6,32,20],[6,32,21],[6,32,22],[6,32,23],[6,33,20],[6,33,21],[6,33,22]]){
     //for (let key of ['bndl1', 'bndl2', 'bndl3', 'bndl4', 'bndl5', 'bndl6']){
         const key = `${tile[0]}-${tile[1]}-${tile[2]}`
         queue.push({

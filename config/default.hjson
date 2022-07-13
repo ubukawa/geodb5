@@ -30,7 +30,7 @@
     dstDir: zxy
     concurrent: 3
     maxRetries: 3
-    retryDelay: 500
+    retryDelay: 5000
     mbtilesDir: mbtiles
     geojsonsDir: geojsons
     spinnerString: 15
