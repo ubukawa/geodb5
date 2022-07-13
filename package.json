@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ubukawa/geodb5#readme",
   "dependencies": {
+    "@mapbox/tilebelt": "^1.0.2",
     "better-queue": "^3.8.10",
     "child_process": "^1.0.2",
     "config": "^3.3.7",

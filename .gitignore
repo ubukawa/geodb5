@@ -1,3 +1,5 @@
 node_modules
 small-data/*
 mbtiles/*
+geojsons/*
+test_area.gdb
