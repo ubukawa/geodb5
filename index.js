@@ -138,10 +138,11 @@ const shutdown = () => {
 
 const main = async () =>{
     const stTime = new Date()
+    console.log(`${stTime.toISOString()}: Production starts. `)
     queueTasks()
     queue.on('drain', () => {
         const closeTime = new Date()
-        console.log(`Production: ${stTime.toISOString()} --> ${closeTime.toISOString()}`)
+        console.log(`Production ends: ${stTime.toISOString()} --> ${closeTime.toISOString()}`)
         shutdown()
     })
 }
