@@ -59,7 +59,7 @@ const queue = new Queue(async (t, cb) => {
     .on('finish', () => {
         FSstream.end()
         const PendTime = new Date()
-        console.log(`FS write end ${key}: ${startTime.toISOString()} --> ${PendTime.toISOString()}`)
+        //console.log(`FS write end ${key}: ${startTime.toISOString()} --> ${PendTime.toISOString()}`)
         //from here
         const VTconversion = new Promise((resolve, reject)=>{
             const tippecanoe = spawn(tippecanoePath, [
@@ -84,7 +84,7 @@ const queue = new Queue(async (t, cb) => {
         })
         .then(()=> {
             const endTime = new Date()
-            console.log(`${key} ends: ${startTime.toISOString()} --> ${endTime.toISOString()} (^o^)/`)
+            console.log(` - ${key} ends: ${startTime.toISOString()} --> ${endTime.toISOString()} (^o^)/`)
             keyInProgress = keyInProgress.filter((v) => !(v === key))
             return cb()
         })
