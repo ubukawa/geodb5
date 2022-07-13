@@ -133,12 +133,15 @@ const queueTasks = () => {
 }
 
 const shutdown = () => {
-    console.log('shutdown (^_^)')
+    console.log('System shutdown (^_^)')
 }
 
 const main = async () =>{
+    const stTime = new Date()
     queueTasks()
     queue.on('drain', () => {
+        const closeTime = new Date()
+        console.log(`Production: ${stTime.toISOString()} --> ${closeTime.toISOString()}`)
         shutdown()
     })
 }
