@@ -60,7 +60,7 @@ const queue = new Queue(async (t, cb) => {
         } else if ((f.properties.contour % 40) == 0){
             f.tippecanoe.minzoom = srcdb.minzoom + 2
         } else {
-            f.tippecanoe.minzoom = srcdb.minzoom + 4
+            f.tippecanoe.minzoom = srcdb.minzoom + 3
         }
         FSstream.write(`\x1e${JSON.stringify(f)}\n`)
     })
