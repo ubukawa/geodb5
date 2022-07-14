@@ -481,7 +481,6 @@
     }
     ogr2ogrPath: ogr2ogr
     tippecanoePath: /usr/local/bin/tippecanoe
-    dstDir: zxy
     concurrent: 4
     maxRetries: 3
     retryDelay: 5000
